@@ -7,8 +7,35 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
+			CrearUsuario: async () => {
+				const actions = getActions()
+				const initialUserrodrigo = {
+					full_name: "Rodrigo",
+					email: "Rodrigo@gmail.com",
+					agenda_slug: "AgendaRodrigo",
+					address: "San jose de mayo, Uruguay",
+					phone: "029939232"
+				}
+				try {
+					const resp = await fetch('https://playground.4geeks.com/apis/fake/contact', {
+						method: "POST",
+						body: JSON.stringify(initialUserrodrigo),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+					const data = await resp.json()
+					if (data.ok) {
+						actions.loadContactos()
+					}
+
+				} catch (error) {
+
+				}
+			},
 			loadContactos: async () => {
 				console.log("traer contactos")
+				const actions = getActions()
 				try {
 					const resp = await fetch("https://playground.4geeks.com/apis/fake/contact/agenda/AgendaRodrigo", {
 						method: "GET",
@@ -17,7 +44,14 @@ const getState = ({ getStore, getActions, setStore }) => {
 						},
 					})
 					const data = await resp.json()
-					setStore({ ...getStore, contacts: data })
+
+					if (data) {
+						setStore({ ...getStore, contacts: data })
+					} else {
+						actions.CrearUsuario()
+					}
+
+
 
 				} catch (error) {
 					console.log(error)
