@@ -4,14 +4,21 @@ import { MdPhoneEnabled } from "react-icons/md"
 import { FiMail } from "react-icons/fi"
 import { AiTwotoneDelete, AiFillEdit } from "react-icons/ai"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import { useNavigate } from "react-router"
 
 export const CardContactF = ({ infoUser, openModal, setSelectedDelete }) => {
     const info = infoUser
+    const nav = useNavigate()
+
 
     const Delete = () => {
         openModal()
         setSelectedDelete(info)
+    }
+
+    const Editar = () => {
+        nav(`/addContact/${info.id}`)
     }
     return (
         <div className="row border border-dark py-2 px-5">
@@ -26,7 +33,7 @@ export const CardContactF = ({ infoUser, openModal, setSelectedDelete }) => {
                 <p className="opacity-75" style={{ fontSize: '15px' }}><spam className="mx-2 ">{<FiMail />}</spam>{infoUser.email}</p>
             </div>
             <div className="col-2">
-                <button className="bg-transparent border-0">{<AiFillEdit fontSize={"25px"} />}</button>
+                <button onClick={Editar} className="bg-transparent border-0">{<AiFillEdit fontSize={"25px"} />}</button>
                 <button onClick={Delete} className="bg-transparent border-0 mx-2" >{<AiTwotoneDelete fontSize={"25px"} />}</button>
 
             </div>

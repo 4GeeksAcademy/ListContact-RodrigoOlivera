@@ -3,11 +3,12 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			contacts: [],
-			stateCambio: false
+			contactEdit: {}
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
 			loadContactos: async () => {
+				console.log("traer contactos")
 				try {
 					const resp = await fetch("https://playground.4geeks.com/apis/fake/contact/agenda/AgendaRodrigo", {
 						method: "GET",
@@ -24,6 +25,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			},
 			addContacto: async (datos) => {
 				try {
+					const actions = getActions()
 					const resp = await fetch("https://playground.4geeks.com/apis/fake/contact", {
 						method: "POST",
 						body: JSON.stringify(datos),
@@ -34,8 +36,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 					})
 					const data = await resp.json()
 					const store = getStore()
-					setStore({ contacts: [...store.contacts, datos] })
-
+					if (data.msg === "Contact created successfully") {
+						actions.loadContactos()
+					}
+					console.log(data)
 
 				} catch (error) {
 					console.log(error)
@@ -45,18 +49,51 @@ const getState = ({ getStore, getActions, setStore }) => {
 					fetch().then().then(data => setStore({ "foo": data.bar }))
 				*/
 			},
-			ActualizarContacto: (index, color) => {
-				//get the store
-				const store = getStore();
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
+			TraerDatosDeUnUsuario: async (id) => {
+				console.log("este es el id")
+				console.log(id)
+				try {
+					const resp = await fetch(`https://playground.4geeks.com/apis/fake/contact/${id}`, {
+						method: "GET",
+						headers: {
+							"Content-Type": "application/json"
+						}
+					})
+					const data = await resp.json()
+					const store = getStore()
+					setStore({ ...store, contactEdit: data[0] })
 
-				//reset the global store
-				setStore({ demo: demo });
+				} catch (error) {
+					console.log(error)
+				}
+			},
+			ActualizarStateInfoUser: (selected) => {
+				const store = getStore()
+				setStore({ ...store, contactEdit: selected })
+			},
+			ActualizarContacto: async (contactEdited) => {
+
+				try {
+					const store = getStore()
+					const actions = getActions()
+					// Pongo el id del usuario dentro de su informacion para actualizarlo
+					const resp = await fetch(`https://playground.4geeks.com/apis/fake/contact/${contactEdited.id}`, {
+						method: "PUT",
+						body: JSON.stringify(contactEdited),
+						headers: {
+							"Content-Type": "application/json"
+						},
+					})
+					const data = await resp.json()
+					if (data.msg) {
+						setStore({ ...store, contactEdit: {} })
+						actions.loadContactos()
+					}
+
+				} catch (error) {
+					console.log(error)
+				}
+
 			},
 			BorrarContacto: async (info) => {
 				console.log("esta es la info")

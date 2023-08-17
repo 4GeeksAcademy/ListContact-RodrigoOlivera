@@ -3,11 +3,16 @@ import PropTypes from "prop-types";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Context } from "../store/appContext";
 import { IoIosArrowBack } from "react-icons/io"
+import { Contacts } from "./Contacts";
 
 
 export const AddNewContact = props => {
 	const { store, actions } = useContext(Context);
-	const { addContacto } = actions;
+	const { addContacto, TraerDatosDeUnUsuario, ActualizarContacto } = actions;
+	const { contactEdit } = store
+	const { UserId } = useParams()
+	const navigate = useNavigate()
+
 
 
 	const initialState = {
@@ -32,18 +37,38 @@ export const AddNewContact = props => {
 
 	}
 
-	const params = useParams();
-	const navigate = useNavigate()
+	useEffect(() => {
+		if (UserId) {
+			TraerDatosDeUnUsuario(UserId)
+		}
+	}, [])
+
+	useEffect(() => {
+		if (UserId) {
+			setStateForm(contactEdit)
+		}
+	}, [contactEdit])
+
+
+	console.log(stateForm)
 
 	const ValidarFormulario = (e) => {
 		e.preventDefault()
 		if (stateForm.full_name !== "" && stateForm.phone !== "" && stateForm.address !== "" && stateForm.email !== "") {
-			addContacto(stateForm)
-			console.log("se inserto correctamente")
+			if (contactEdit.full_name) {
+				setStateForm({ ...stateForm, id: UserId })
+				ActualizarContacto(stateForm)
+			} else {
+				console.log(stateForm)
+				addContacto(stateForm)
+				console.log("Insertar Contacto")
+			}
 		} else {
 			console.log(" no se puede mandar")
 		}
 	}
+
+	console.log(stateForm)
 	return (
 		<div className="row">
 			<div className="col-6 m-auto px-5 py-2">
