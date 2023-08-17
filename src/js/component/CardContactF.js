@@ -6,7 +6,7 @@ import { AiTwotoneDelete, AiFillEdit } from "react-icons/ai"
 
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router"
-
+import { PropTypes } from 'prop-types';
 export const CardContactF = ({ infoUser, openModal, setSelectedDelete }) => {
     const info = infoUser
     const nav = useNavigate()
@@ -40,4 +40,11 @@ export const CardContactF = ({ infoUser, openModal, setSelectedDelete }) => {
         </div>
     )
 }
+
+CardContactF.propTypes = {
+    infoUser: PropTypes.object,
+    openModal: PropTypes.func,
+    setSelectedDelete: PropTypes.func
+}
+
 

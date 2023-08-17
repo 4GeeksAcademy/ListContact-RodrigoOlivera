@@ -1,5 +1,6 @@
 import React, { useContext } from "react"
 import { Context } from "../store/appContext"
+import { PropTypes } from 'prop-types';
 
 export const Modal = ({ closeModal, info }) => {
     const ancho = window.innerWidth;
@@ -23,4 +24,8 @@ export const Modal = ({ closeModal, info }) => {
             </div>
         </div>
     )
+}
+Modal.propTypes = {
+    info: PropTypes.object,
+    closeModal: PropTypes.func
 }

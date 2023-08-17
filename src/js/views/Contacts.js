@@ -18,9 +18,9 @@ export const Contacts = () => {
 		setStateModal(true)
 	}
 
-	useEffect(()=>{
+	useEffect(() => {
 		console.log(selectedDelete)
-	},[selectedDelete])
+	}, [selectedDelete])
 
 	const { store, actions } = useContext(Context);
 	//denteo del store tenemos nuestros datos, y en las acciones son las que manipulan los datos

@@ -10,7 +10,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			CrearUsuario: async () => {
 				const actions = getActions()
 				const initialUserrodrigo = {
-					full_name: "Rodrigo",
+					full_name: "Rodriguito",
 					email: "Rodrigo@gmail.com",
 					agenda_slug: "AgendaRodrigo",
 					address: "San jose de mayo, Uruguay",
